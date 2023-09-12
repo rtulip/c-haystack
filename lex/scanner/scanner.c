@@ -59,8 +59,15 @@ static void _scanner_next_token(Scanner* const self)
     {
         default:
         {
-            printf("Scanner Error: Not sure what to do with `%c`\n", c);
-            exit(1);
+            StringView sv = {
+                .length = 1,
+                .slice = &self->source->slice[self->current-1],
+            };
+            
+            token_vec_push(&self->tokens, (Token){
+                .lexeme = sv
+            });
+            
         }
     }
 }
