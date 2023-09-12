@@ -1,3 +1,4 @@
+#include "tools/sv/sv.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -9,61 +10,23 @@ void usage(void)
 
 int main(int argc, const char** argv) {
 
-    int exit_code = 0;
+    register_sv_printf();
 
-    do {
-        if (argc != 2)
-        {
-            printf("ERROR: Expected a file to compile\n");
-            usage();
-            exit_code = -1;
-            break;
-        }
+    if (argc != 2)
+    {
+        printf("ERROR: Expected a file to compile\n");
+        usage();
+        return -1;
+    }
 
-
-        const char* file_path = argv[1];
-        printf("File: %s\n", file_path);
-        FILE* file = fopen(file_path, "r");
-
-        if (file == NULL)
-        {
-            printf("ERROR: Failed to open file: `%s`\n", argv[1]);
-            usage();
-            exit_code = -1;
-            break;
-        }
-
-        // File is open and must be closed
-        do {
-
-            fseek (file, 0, SEEK_END);
-            size_t length = ftell (file);
-            fseek (file, 0, SEEK_SET);
-
-            char* buffer = malloc(length);
-            if (buffer == NULL)
-            {
-                printf("ERROR: Failed to allocate space to read file.\n");
-                exit_code = -1;
-                break;
-            }
-
-            printf("Length: %ld\n", length);
-            
-            do {
-                fread(buffer, 1, length, file);
-                
-                printf("%s\n", buffer);
-
-            } while (0); // free the buffer
-
-            free(buffer);
-
-        } while(0); // Close file
-
-        fclose(file);
+    const char* filepath = argv[1];
+    printf("File: %s\n", filepath);
+    StringView file_sv = sv_read_from_file_alloc(filepath);
+    {
+        printf("%v\n", &file_sv);
+    }
+    free((void*) file_sv.slice);
         
-    } while (0);
 
-    return exit_code;
+    return 0;
 }
