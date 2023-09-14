@@ -26,16 +26,6 @@ int main(int argc, const char** argv)
     
     TokenVec tokens = scan_tokens_alloc(&filepath, &source);
 
-    for (size_t i = 0; i < tokens.length; i++)
-    {
-        printf(
-            "Token[%ld]: %.*s\n",
-            i, 
-            (int)tokens.tokens[i].lexeme.length, 
-            tokens.tokens[i].lexeme.slice
-        );
-    }
-
     token_vec_destroy(&tokens);
     free((void*) source.slice);
         

@@ -9,15 +9,33 @@ usage:
 	@echo "    * Test vec:     'make test_vec_token"
 	@echo "    * Test scanner: 'make test_scanner'"
 
-build: setup sv vec_token scanner
-	@gcc -o $(BUILD_DIR)/main main.c \
+build: setup sv vec_token scanner quote tokenkind token
+	@gcc -o $(BUILD_DIR)/main main.c $(CC_OPTIONS) \
 		$(BUILD_DIR)/sv.o            \
 		$(BUILD_DIR)/scanner.o       \
 		$(BUILD_DIR)/vec_token.o     \
-		$(CC_OPTIONS)
+		$(BUILD_DIR)/quote.o         \
+		$(BUILD_DIR)/token.o         \
+		$(BUILD_DIR)/tokenkind.o     \
+		
 
 sv:
 	@gcc -c tools/sv/sv.c -o $(BUILD_DIR)/sv.o $(CC_OPTIONS) -Itools/sv/
+
+quote: sv
+	@gcc -o $(BUILD_DIR)/quote.o -c \
+		lex/quote/quote.c           \
+		$(CC_OPTIONS) -Ilex/quote/  \
+
+token: sv
+	@gcc -o $(BUILD_DIR)/token.o -c \
+		lex/token/token.c           \
+		$(CC_OPTIONS) -Ilex/token/
+
+tokenkind: sv
+	@gcc -o $(BUILD_DIR)/tokenkind.o -c \
+		lex/token/tokenkind.c           \
+		$(CC_OPTIONS) -Ilex/token       \
 
 vec_token: sv
 	@gcc  -o $(BUILD_DIR)/vec_token.o -c \
