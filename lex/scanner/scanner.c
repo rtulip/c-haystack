@@ -1,9 +1,11 @@
 #include "lex/scanner/scanner.h"
 #include "tools/vec/token/vec.h"
+#include "tools/sv/sv.h"
 #include <stdbool.h>
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <ctype.h>
 
 typedef struct Scanner {
     const StringView* const filename;
@@ -48,6 +50,13 @@ static char _scanner_advance(Scanner* const self)
     self->token_end += 1;
 
     return self->source->slice[self->current - 1];
+}
+
+static char _scanner_peek(const Scanner* const self, size_t offset)
+{
+    assert(self != NULL);
+    assert(self->current - 1 + offset < self->source->length);
+    return self->source->slice[self->current - 1 + offset];
 }
 
 static void _scanner_add_token(Scanner* const self, TokenKindTag kind)
@@ -130,9 +139,21 @@ static void _scanner_add_token(Scanner* const self, TokenKindTag kind)
             ));
             break;
         case TOKENKIND_TAG_IDENT:
-            printf("TODO: Handle TOKENKIND_TAG_IDENT\n");
-            exit(1);
+        {  
+            StringView sv = sv_substring(self->source, self->start, self->current);
+            
+            token_vec_push(&self->tokens, token_new(
+                quote_new(
+                    sv,
+                    *self->filename,
+                    self->line,
+                    self->token_start,
+                    self->token_end
+                ),
+                token_kind_new_ident(sv)
+            ));
             break;
+        }
         case TOKENKIND_TAG_NUMBER:
             printf("TODO: Handle TOKENKIND_TAG_NUMBER\n");
             exit(1);
@@ -154,6 +175,43 @@ static void _scanner_newline(Scanner* const self)
     self->line += 1;
     self->token_start = 1;
     self->token_end = 1;
+}
+
+static bool _should_advance_ident(const Scanner* self)
+{
+    switch (_scanner_peek(self, 1))
+    {
+        case ' ':
+        case '\n':
+        case '\t':
+        case '\r':
+        case ':':
+        case '{':
+        case '}':
+        case '[':
+        case ']':
+        case '(':
+        case ')':
+        case '<':
+        case '>':
+            return false;
+        default:
+            break;
+    }
+
+    return !_scanner_is_at_end(self);
+}
+
+static void _scanner_parse_ident(Scanner* const self)
+{
+
+    while (_should_advance_ident(self))
+    {
+        _scanner_advance(self);
+    }
+    
+    _scanner_add_token(self, TOKENKIND_TAG_IDENT);
+
 }
 
 static void _scanner_next_token(Scanner* const self)
@@ -196,8 +254,20 @@ static void _scanner_next_token(Scanner* const self)
 
         default:
         {
-            printf("ERROR: Not sure what to do with char `%c`", c);
-            exit(1);
+            if (isdigit(c))
+            {
+                printf("TODO: Parse number\n");
+                exit(1);
+            }
+            else if (isalpha(c) || c == '_')
+            {
+                _scanner_parse_ident(self);
+            }
+            else 
+            {
+                printf("ERROR: Not sure what to do with char `%c`\n", c);
+                exit(1);
+            }
         }
     }
 }
