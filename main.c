@@ -26,6 +26,12 @@ int main(int argc, const char** argv)
     
     TokenVec tokens = scan_tokens_alloc(&filepath, &source);
 
+    for (size_t i = 0; i < tokens.length; i++)
+    {
+        const Token* const tok = token_vec_at(&tokens, i);
+        token_print(tok);
+    }
+
     token_vec_destroy(&tokens);
     free((void*) source.slice);
         

@@ -1,6 +1,7 @@
 #ifndef TOKENKIND_H_
 #define TOKENKIND_H_
 #include "tools/sv/sv.h"
+#include "lex/scanner/keywords.h"
 #include <stdint.h>
 
 typedef enum TokenKindTag {
@@ -12,11 +13,13 @@ typedef enum TokenKindTag {
     TOKENKIND_TAG_RIGHT_BRACKET,
     TOKENKIND_TAG_IDENT,
     TOKENKIND_TAG_NUMBER,
+    TOKENKIND_TAG_KEYWORD,
 } TokenKindTag;
 
 typedef union TokenKindValue {
     StringView ident;
     uint64_t   number;
+    KeywordId  kw_id;
 } TokenKindValue;
 
 typedef struct TokenKind {
@@ -34,5 +37,6 @@ TokenKind token_kind_new_left_bracket(void);
 TokenKind token_kind_new_right_bracket(void);
 TokenKind token_kind_new_ident(StringView ident);
 TokenKind token_kind_new_number(uint64_t number);
+TokenKind token_kind_new_keyword(KeywordId kw);
 
 #endif

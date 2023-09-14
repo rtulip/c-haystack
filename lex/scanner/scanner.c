@@ -140,7 +140,12 @@ static void _scanner_add_token(Scanner* const self, TokenKindTag kind)
             ));
             break;
         case TOKENKIND_TAG_IDENT:
-        {              
+        {   
+            KeywordId kw = ident_is_keyword(&sv);
+            TokenKind kind = (kw == KW_END_OF_LIST) ? 
+                token_kind_new_ident(sv) :
+                token_kind_new_keyword(kw);
+
             token_vec_push(&self->tokens, token_new(
                 quote_new(
                     sv,
@@ -149,9 +154,13 @@ static void _scanner_add_token(Scanner* const self, TokenKindTag kind)
                     self->token_start,
                     self->token_end
                 ),
-                token_kind_new_ident(sv)
+                kind
             ));
             break;
+        }
+        case TOKENKIND_TAG_KEYWORD:
+        {
+            assert(0 && "Keywords should be treated as idents.");
         }
         case TOKENKIND_TAG_NUMBER:
         {

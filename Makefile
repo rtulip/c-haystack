@@ -17,6 +17,7 @@ build: setup sv vec_token scanner quote tokenkind token
 		$(BUILD_DIR)/quote.o         \
 		$(BUILD_DIR)/token.o         \
 		$(BUILD_DIR)/tokenkind.o     \
+		$(BUILD_DIR)/keywords.o      \
 		
 
 sv:
@@ -50,10 +51,15 @@ test_vec_token: vec_token
 		$(CC_OPTIONS)
 	@make test EXE=test
 	
-scanner: vec_token sv
+scanner: vec_token sv keywords
 	@gcc -o $(BUILD_DIR)/scanner.o -c \
 		lex/scanner/scanner.c         \
 		$(CC_OPTIONS) -Ilex/scanner/
+
+keywords:
+	@gcc -o $(BUILD_DIR)/keywords.o -c \
+		lex/scanner/keywords.c         \
+		$(CC_OPTIONS) -Ilex/scanner 
 
 test_scanner: scanner 
 	@gcc -o $(BUILD_DIR)/test    \

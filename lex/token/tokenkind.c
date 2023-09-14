@@ -22,9 +22,11 @@ const char* token_kind_tag_to_cstr(TokenKindTag tag)
             return "TOKENKIND_TAG_IDENT";
         case TOKENKIND_TAG_NUMBER:
             return "TOKENKIND_TAG_NUMBER";
+        case TOKENKIND_TAG_KEYWORD:
+            return "TOKENKIND_TAG_KEYWORD";
         default:
             printf("ERROR: Unknown token kind tag: %d", tag);
-            assert(0);
+            assert(0 && "Unknown token kind tag");
     }
 }
 
@@ -84,4 +86,13 @@ TokenKind token_kind_new_number(uint64_t number)
         .tag = TOKENKIND_TAG_NUMBER,
         .value.number = number,
     };    
+}
+
+
+TokenKind token_kind_new_keyword(KeywordId kw)
+{
+    return (TokenKind) {
+        .tag = TOKENKIND_TAG_KEYWORD,
+        .value.kw_id = kw,
+    };
 }
