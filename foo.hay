@@ -1,3 +1,6 @@
-fn main() {
+fn main() { 
     12345 putlnu
+    "Hello World!" putlns
+    []
 }
+

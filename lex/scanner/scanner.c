@@ -178,6 +178,21 @@ static void _scanner_add_token(Scanner* const self, TokenKindTag kind)
             ));
             break;
         }
+        case TOKENKIND_TAG_STRING:
+        {
+            StringView string = sv_substring(&sv, 1, sv.length -1);
+            token_vec_push(&self->tokens, token_new(
+                quote_new(
+                    sv,
+                    *self->filename,
+                    self->line,
+                    self->token_start,
+                    self->token_end
+                ),
+                token_kind_new_string(string)
+            ));
+            break;
+        }
         default:
             printf("Unknown tokenkindtag: %d\n", kind);
             exit(1);
@@ -233,12 +248,33 @@ static void _scanner_parse_ident(Scanner* const self)
 
 static void _scanner_parse_number(Scanner* const self)
 {
-    while (isdigit(_scanner_peek(self, 1)))
+    while (isdigit(_scanner_peek(self, 1)) && !_scanner_is_at_end(self))
     {
         _scanner_advance(self);
     }
 
     _scanner_add_token(self, TOKENKIND_TAG_NUMBER);
+}
+
+static void _scanner_parse_string(Scanner* const self)
+{
+    while (_scanner_peek(self, 1) != '"')
+    {
+        if (_scanner_is_at_end(self))
+        {
+            printf("ERROR: Unterminated string");
+            exit(1);
+        }
+
+        _scanner_advance(self);
+    }
+
+    /**
+     * Consume the closing `"`
+     */
+    _scanner_advance(self);    
+
+    _scanner_add_token(self, TOKENKIND_TAG_STRING);
 }
 
 static void _scanner_next_token(Scanner* const self)
@@ -267,6 +303,10 @@ static void _scanner_next_token(Scanner* const self)
             _scanner_add_token(self, TOKENKIND_TAG_RIGHT_PAREN);
             break;
         
+        case '"':
+            _scanner_parse_string(self);
+            break;
+
         /**
          * do nothing for whitespace.
          */
