@@ -62,13 +62,14 @@ static char _scanner_peek(const Scanner* const self, size_t offset)
 static void _scanner_add_token(Scanner* const self, TokenKindTag kind)
 {
     assert(self != NULL);
+    StringView sv = sv_substring(self->source, self->start, self->current);
     switch (kind)
     {
         case TOKENKIND_TAG_LEFT_BRACE:
 
             token_vec_push(&self->tokens, token_new(
                 quote_new(
-                    sv_substring(self->source, self->start, self->current),
+                    sv,
                     *self->filename,
                     self->line,
                     self->token_start,
@@ -81,7 +82,7 @@ static void _scanner_add_token(Scanner* const self, TokenKindTag kind)
         case TOKENKIND_TAG_RIGHT_BRACE:
             token_vec_push(&self->tokens, token_new(
                 quote_new(
-                    sv_substring(self->source, self->start, self->current),
+                    sv,
                     *self->filename,
                     self->line,
                     self->token_start,
@@ -93,7 +94,7 @@ static void _scanner_add_token(Scanner* const self, TokenKindTag kind)
         case TOKENKIND_TAG_LEFT_PAREN:
             token_vec_push(&self->tokens, token_new(
                 quote_new(
-                    sv_substring(self->source, self->start, self->current),
+                    sv,
                     *self->filename,
                     self->line,
                     self->token_start,
@@ -105,7 +106,7 @@ static void _scanner_add_token(Scanner* const self, TokenKindTag kind)
         case TOKENKIND_TAG_RIGHT_PAREN:
             token_vec_push(&self->tokens, token_new(
                 quote_new(
-                    sv_substring(self->source, self->start, self->current),
+                    sv,
                     *self->filename,
                     self->line,
                     self->token_start,
@@ -117,7 +118,7 @@ static void _scanner_add_token(Scanner* const self, TokenKindTag kind)
         case TOKENKIND_TAG_LEFT_BRACKET:
             token_vec_push(&self->tokens, token_new(
                 quote_new(
-                    sv_substring(self->source, self->start, self->current),
+                    sv,
                     *self->filename,
                     self->line,
                     self->token_start,
@@ -129,7 +130,7 @@ static void _scanner_add_token(Scanner* const self, TokenKindTag kind)
         case TOKENKIND_TAG_RIGHT_BRACKET:
             token_vec_push(&self->tokens, token_new(
                 quote_new(
-                    sv_substring(self->source, self->start, self->current),
+                    sv,
                     *self->filename,
                     self->line,
                     self->token_start,
@@ -139,9 +140,7 @@ static void _scanner_add_token(Scanner* const self, TokenKindTag kind)
             ));
             break;
         case TOKENKIND_TAG_IDENT:
-        {  
-            StringView sv = sv_substring(self->source, self->start, self->current);
-            
+        {              
             token_vec_push(&self->tokens, token_new(
                 quote_new(
                     sv,
@@ -155,17 +154,26 @@ static void _scanner_add_token(Scanner* const self, TokenKindTag kind)
             break;
         }
         case TOKENKIND_TAG_NUMBER:
-            printf("TODO: Handle TOKENKIND_TAG_NUMBER\n");
-            exit(1);
+        {
+            uint32_t n = strtoul(sv.slice, NULL, 10);
+
+            token_vec_push(&self->tokens, token_new(
+                quote_new(
+                    sv,
+                    *self->filename,
+                    self->line,
+                    self->token_start,
+                    self->token_end
+                ),
+                token_kind_new_number(n)
+            ));
             break;
+        }
         default:
             printf("Unknown tokenkindtag: %d\n", kind);
             exit(1);
             break;
     }
-
-
-    token_print(token_vec_last(&self->tokens));
 
 }
 
@@ -214,6 +222,16 @@ static void _scanner_parse_ident(Scanner* const self)
 
 }
 
+static void _scanner_parse_number(Scanner* const self)
+{
+    while (isdigit(_scanner_peek(self, 1)))
+    {
+        _scanner_advance(self);
+    }
+
+    _scanner_add_token(self, TOKENKIND_TAG_NUMBER);
+}
+
 static void _scanner_next_token(Scanner* const self)
 {
     assert(self != NULL);
@@ -256,8 +274,7 @@ static void _scanner_next_token(Scanner* const self)
         {
             if (isdigit(c))
             {
-                printf("TODO: Parse number\n");
-                exit(1);
+                _scanner_parse_number(self);
             }
             else if (isalpha(c) || c == '_')
             {
