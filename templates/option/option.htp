@@ -1,0 +1,25 @@
+#ifndef OPTION_{{TypeAlias}}_H_
+#define OPTION_{{TypeAlias}}_H_
+
+#include <stddef.h>
+#include <stdbool.h>
+{{Includes}}
+
+#define option_{{TypeName}}_unwrap(option) option_{{TypeName}}_unwrap_internal(option, __FILE__, __LINE__)
+
+typedef struct Option{{TypeAlias}} {
+    {{TypeName}} value;
+    bool is_some;
+} Option{{TypeAlias}};
+
+Option{{TypeAlias}} option_{{TypeName}}_some({{TypeName}} value);
+Option{{TypeAlias}} option_{{TypeName}}_none(void);
+
+{{TypeName}} option_{{TypeName}}_unwrap_internal(
+    Option{{TypeAlias}} option,
+    const char* const file,
+    const size_t line
+);
+bool option_{{TypeName}}_is_some(Option{{TypeAlias}}* option);
+
+#endif 

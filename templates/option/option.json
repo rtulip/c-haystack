@@ -1,0 +1,11 @@
+{
+    "TargetDir": ".codegen/option/",
+    "FileName": "Option{{TypeAlias}}",
+    "Substitutions": [
+        {
+            "TypeAlias": "Bool",
+            "TypeName": "bool",
+            "Includes": ""
+        }
+    ]
+}

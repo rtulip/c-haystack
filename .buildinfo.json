@@ -1,0 +1,49 @@
+{
+    "BuildDir": ".build",
+    "Options": "-I. -Wall -Wextra",
+    "Sources": [
+        {
+            "name": "main",
+            "source": "main.c",
+            "path": "."
+        },
+        {
+            "name": "sv",
+            "path": "tools/sv/",
+            "source": "sv.c"
+        },
+        {
+            "name": "quote",
+            "path": "lex/quote",
+            "source": "quote.c"
+        },
+        {
+            "name": "scanner",
+            "path": "lex/scanner",
+            "source": "scanner.c"
+        },
+        {
+            "name": "keywords",
+            "path": "lex/scanner",
+            "source": "keywords.c"
+        },
+        {
+            "name": "token",
+            "path": "lex/token",
+            "source": "token.c"
+        },
+        {
+            "name": "tokenkind",
+            "path": "lex/token",
+            "source": "tokenkind.c"
+        },
+        {
+            "name": "vec_token",
+            "path": "tools/vec/token",
+            "source": "vec.c"
+        }
+    ],
+    "Templates": [
+        "templates/option"
+    ]
+}
