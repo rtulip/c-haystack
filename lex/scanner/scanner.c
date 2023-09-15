@@ -1,5 +1,4 @@
 #include "lex/scanner/scanner.h"
-#include ".codegen/vec/VecToken.h"
 #include "tools/sv/sv.h"
 #include <stdbool.h>
 #include <assert.h>

@@ -1,6 +1,6 @@
 {
     "BuildDir": ".build",
-    "Options": "-I. -Wall -Wextra",
+    "Options": "-I. -I.codegen -Wall -Wextra",
     "Sources": [
         {
             "name": "main",
