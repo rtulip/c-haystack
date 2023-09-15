@@ -1,0 +1,17 @@
+{
+    "TargetDir": ".codegen/either/",
+    "FileName": "Either{{LeftTypeUpper}}Or{{RightTypeUpper}}",
+    "Substitutions": [
+        {
+            "RightTypeUpper": "U8",
+            "RightTypeLower": "u8",
+            "RightTypeName": "uint8_t",
+            "RightTypeIdentifier": "u8",
+            "LeftTypeUpper": "Token",
+            "LeftTypeLower": "token",
+            "LeftTypeName": "Token",
+            "LeftTypeIdentifier": "token",
+            "Includes": "#include \"lex/token/token.h\"\n#include <stdint.h>"
+        }
+    ]
+}

@@ -36,6 +36,7 @@ case ${FULLCLEAN} in
         rm -rf .build/
         rm -rf .codegen
         rm -f main
+        exit 0
         ;;
     *)
         ;;
@@ -45,6 +46,7 @@ case ${CLEAN} in
     YES)
         rm -rf .build/
         rm -f main
+        exit 0
         ;;
     *)
         ;;
@@ -55,25 +57,6 @@ python3 tools/scripts/build.py
 case ${RUN} in 
     YES)
         ./main ${FILE}
-        ;;
-    *)
-        ;;
-esac
-
-case ${FULLCLEAN} in
-    YES)
-        rm -rf .build/
-        rm -rf .codegen
-        rm -f main
-        ;;
-    *)
-        ;;
-esac
-
-case ${CLEAN} in
-    YES)
-        rm -rf .build/
-        rm -f main
         ;;
     *)
         ;;

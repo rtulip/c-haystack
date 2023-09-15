@@ -1,0 +1,35 @@
+#ifndef EITHER_{{LeftTypeUpper}}_{{RightTypeUpper}}_H_
+#define EITHER_{{LeftTypeUpper}}_{{RightTypeUpper}}_H_
+
+#include <stdbool.h>
+{{Includes}}
+
+#define either_{{LeftTypeLower}}_or_{{RightTypeLower}}_unpack_{{RightTypeLower}}(either) \
+    either_{{LeftTypeLower}}_or_{{RightTypeLower}}_unpack_{{RightTypeLower}}_internal(either, __FILE__, __LINE__)
+#define either_{{LeftTypeLower}}_or_{{RightTypeLower}}_unpack_{{LeftTypeLower}}(either) \
+    either_{{LeftTypeLower}}_or_{{RightTypeLower}}_unpack_{{LeftTypeLower}}_internal(either, __FILE__, __LINE__)
+
+typedef struct Either{{LeftTypeUpper}}Or{{RightTypeUpper}} {
+    union {
+        {{LeftTypeName}} left;
+        {{RightTypeName}} right;
+    } either;
+    bool is_left;
+} Either{{LeftTypeUpper}}Or{{RightTypeUpper}};
+
+Either{{LeftTypeUpper}}Or{{RightTypeUpper}} either_{{LeftTypeLower}}_or_{{RightTypeLower}}_new_{{LeftTypeLower}}({{LeftTypeName}} {{LeftTypeIdentifier}});
+Either{{LeftTypeUpper}}Or{{RightTypeUpper}} either_{{LeftTypeLower}}_or_{{RightTypeLower}}_new_{{RightTypeLower}}({{RightTypeName}} {{RightTypeIdentifier}});
+bool either_{{LeftTypeLower}}_or_{{RightTypeLower}}_is_{{LeftTypeLower}}(const Either{{LeftTypeUpper}}Or{{RightTypeUpper}}* const either);
+bool either_{{LeftTypeLower}}_or_{{RightTypeLower}}_is_{{RightTypeLower}}(const Either{{LeftTypeUpper}}Or{{RightTypeUpper}}* const either);
+{{LeftTypeName}} either_{{LeftTypeLower}}_or_{{RightTypeLower}}_unpack_{{LeftTypeLower}}_internal(
+    const Either{{LeftTypeUpper}}Or{{RightTypeUpper}}* const either,
+    const char* const file,
+    const size_t line
+);
+{{RightTypeName}} either_{{LeftTypeLower}}_or_{{RightTypeLower}}_unpack_{{RightTypeLower}}_internal(
+    const Either{{LeftTypeUpper}}Or{{RightTypeUpper}}* const either,
+    const char* const file,
+    const size_t line
+);
+
+#endif
