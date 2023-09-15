@@ -1,5 +1,5 @@
 {
-    "TargetDir": ".codegen/either/",
+    "TargetDir": "either",
     "FileName": "Either{{LeftTypeUpper}}Or{{RightTypeUpper}}",
     "Substitutions": [
         {

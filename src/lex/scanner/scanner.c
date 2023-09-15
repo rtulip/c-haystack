@@ -1,5 +1,5 @@
 #include "lex/scanner/scanner.h"
-#include "tools/sv/sv.h"
+#include "sv/sv.h"
 #include <stdbool.h>
 #include <assert.h>
 #include <stdio.h>

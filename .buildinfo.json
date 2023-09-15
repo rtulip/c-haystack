@@ -1,6 +1,7 @@
 {
     "BuildDir": ".build",
-    "Options": "-I. -I.codegen -Wall -Wextra",
+    "TemplateDir": ".codegen",
+    "Options": "-Isrc -I.codegen -Wall -Wextra",
     "Sources": [
         {
             "name": "main",
@@ -9,32 +10,32 @@
         },
         {
             "name": "sv",
-            "path": "tools/sv/",
+            "path": "src/sv/",
             "source": "sv.c"
         },
         {
             "name": "quote",
-            "path": "lex/quote",
+            "path": "src/lex/quote",
             "source": "quote.c"
         },
         {
             "name": "scanner",
-            "path": "lex/scanner",
+            "path": "src/lex/scanner",
             "source": "scanner.c"
         },
         {
             "name": "keywords",
-            "path": "lex/scanner",
+            "path": "src/lex/scanner",
             "source": "keywords.c"
         },
         {
             "name": "token",
-            "path": "lex/token",
+            "path": "src/lex/token",
             "source": "token.c"
         },
         {
             "name": "tokenkind",
-            "path": "lex/token",
+            "path": "src/lex/token",
             "source": "tokenkind.c"
         }
     ],

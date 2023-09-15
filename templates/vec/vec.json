@@ -1,5 +1,5 @@
 {
-    "TargetDir": ".codegen/vec/",
+    "TargetDir": "vec",
     "FileName": "Vec{{UpperTypeAlias}}",
     "Substitutions": [
         {

@@ -43,15 +43,14 @@ def build_template(template_path, buildinfo):
     c = format_template_file(c)
     h = format_template_file(h)
 
-    target_dir = meta['TargetDir']
+    target_dir = f"{os.path.normpath(buildinfo['TemplateDir'])}/{os.path.normpath(meta['TargetDir'])}"
     os.makedirs(target_dir, exist_ok=True)
     file_name_template = meta['FileName']
 
     object_files = []
     subs = meta['Substitutions']
     for sub in subs:
-        sub['TargetDir'] = target_dir
-
+        sub['TargetDir'] = meta['TargetDir']
         filename = format_template_file(file_name_template).format(**sub)
         with open(f"{target_dir}/{filename}.c", "w") as file:
             file.write(c.format(**sub))

@@ -1,6 +1,6 @@
 #ifndef KEYWORDS_H_
 #define KEYWORDS_H_
-#include "tools/sv/sv.h"
+#include "sv/sv.h"
 
 typedef enum KeywordId {
     KW_FN,

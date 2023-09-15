@@ -1,6 +1,6 @@
 #ifndef TOKENKIND_H_
 #define TOKENKIND_H_
-#include "tools/sv/sv.h"
+#include "sv/sv.h"
 #include "lex/scanner/keywords.h"
 #include <stdint.h>
 

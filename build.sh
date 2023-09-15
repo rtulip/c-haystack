@@ -52,7 +52,7 @@ case ${CLEAN} in
         ;;
 esac
 
-python3 tools/scripts/build.py
+python3 scripts/build.py
 
 case ${RUN} in 
     YES)

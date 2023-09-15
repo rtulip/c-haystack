@@ -1,4 +1,4 @@
-#include "tools/sv/sv.h"
+#include "sv/sv.h"
 #include "lex/scanner/scanner.h"
 #include <stdio.h>
 #include <string.h>
