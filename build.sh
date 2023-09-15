@@ -18,6 +18,10 @@ while [[ $# -gt 0 ]]; do
             FULLCLEAN=YES
             shift
             ;;
+        -q|--quiet)
+            QUIET=YES
+            shift
+            ;;
         -*|--*)
             echo "Unknown option $1"
             exit 1
@@ -52,7 +56,14 @@ case ${CLEAN} in
         ;;
 esac
 
-python3 scripts/build.py
+case ${QUIET} in
+    YES)
+        python3 scripts/build.py --quiet
+        ;;
+    *)
+        python3 scripts/build.py
+        ;;
+esac
 
 case ${RUN} in 
     YES)
