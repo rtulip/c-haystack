@@ -1,24 +1,24 @@
-#include "{{TargetDir}}/Option{{TypeAlias}}.h"
+#include "{{TargetDir}}/Option{{UpperTypeAlias}}.h"
 #include <assert.h>
 #include <stdio.h>
 
-Option{{TypeAlias}} option_{{TypeName}}_some({{TypeName}} value)
+Option{{UpperTypeAlias}} option_{{LowerTypeAlias}}_some({{TypeName}} value)
 {
-    return (Option{{TypeAlias}}) {
+    return (Option{{UpperTypeAlias}}) {
         .value = value,
         .is_some = true,
     };
 }
 
-Option{{TypeAlias}} option_{{TypeName}}_none(void)
+Option{{UpperTypeAlias}} option_{{LowerTypeAlias}}_none(void)
 {
-    return (Option{{TypeAlias}}) {
-        .is_some = true,
+    return (Option{{UpperTypeAlias}}) {
+        .is_some = false,
     };
 }
 
-{{TypeName}} option_{{TypeName}}_unwrap_internal(
-    Option{{TypeAlias}} option,
+{{TypeName}} option_{{LowerTypeAlias}}_unwrap_internal(
+    Option{{UpperTypeAlias}} option,
     const char* const file,
     const size_t line
 )
@@ -32,7 +32,7 @@ Option{{TypeAlias}} option_{{TypeName}}_none(void)
     return option.value;
 }
 
-bool option_{{TypeName}}_is_some(Option{{TypeAlias}}* option)
+bool option_{{LowerTypeAlias}}_is_some(const Option{{UpperTypeAlias}}* const option)
 {
     assert(option != NULL);
     return option->is_some;

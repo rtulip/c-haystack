@@ -24,7 +24,15 @@ int main(int argc, const char** argv)
         
     printf("Source:\n%.*s\n", (int)source.length, source.slice);
     
-    VecToken tokens = scan_tokens_alloc(&filepath, &source);
+    EitherVecTokenOrScannerError maybe_tokens = scan_tokens_alloc(&filepath, &source);
+    if (either_vec_token_or_scanner_error_is_scanner_error(&maybe_tokens))
+    {
+        ScannerError err = either_vec_token_or_scanner_error_unpack_scanner_error(&maybe_tokens);
+        scanner_error_report(&err);
+        exit(1);
+    }
+
+    VecToken tokens = either_vec_token_or_scanner_error_unpack_vec_token(&maybe_tokens);
 
     for (size_t i = 0; i < tokens.length; i++)
     {

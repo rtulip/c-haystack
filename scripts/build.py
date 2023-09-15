@@ -47,7 +47,16 @@ def build_template(template_path, buildinfo, args):
     subs = meta['Substitutions']
     for sub in subs:
         sub['TargetDir'] = meta['TargetDir']
-        filename = format_template_file(file_name_template).format(**sub)
+        try:
+            filename = format_template_file(file_name_template).format(**sub)
+        except Exception as e:
+            print(f"Format Error: {e}")
+            print()
+            print(f"  Template: {template_path}")
+            print(f"  Sub: {sub}")
+
+            exit(1)
+
         with open(f"{target_dir}/{filename}.c", "w") as file:
             file.write(c.format(**sub))
         with open(f"{target_dir}/{filename}.h", "w") as file:

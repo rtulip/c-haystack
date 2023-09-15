@@ -3,8 +3,9 @@
 
 #include "sv/sv.h"
 #include "vec/VecToken.h"
+#include "either/EitherVecTokenOrScannerError.h"
 
-VecToken scan_tokens_alloc(
+EitherVecTokenOrScannerError scan_tokens_alloc(
     const StringView* const filepath, 
     const StringView* const  source
 );

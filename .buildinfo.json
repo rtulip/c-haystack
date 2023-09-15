@@ -24,6 +24,11 @@
             "source": "scanner.c"
         },
         {
+            "name": "scanner_error",
+            "path": "src/lex/scanner",
+            "source": "scanner_error.c"
+        },
+        {
             "name": "keywords",
             "path": "src/lex/scanner",
             "source": "keywords.c"

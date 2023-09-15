@@ -3,15 +3,15 @@
     "FileName": "Either{{LeftTypeUpper}}Or{{RightTypeUpper}}",
     "Substitutions": [
         {
-            "RightTypeUpper": "U8",
-            "RightTypeLower": "u8",
-            "RightTypeName": "uint8_t",
-            "RightTypeIdentifier": "u8",
-            "LeftTypeUpper": "Token",
-            "LeftTypeLower": "token",
-            "LeftTypeName": "Token",
-            "LeftTypeIdentifier": "token",
-            "Includes": "#include \"lex/token/token.h\"\n#include <stdint.h>"
+            "LeftTypeUpper": "VecToken",
+            "LeftTypeLower": "vec_token",
+            "LeftTypeName": "VecToken",
+            "LeftTypeIdentifier": "vec",
+            "RightTypeUpper": "ScannerError",
+            "RightTypeLower": "scanner_error",
+            "RightTypeName": "ScannerError",
+            "RightTypeIdentifier": "err",
+            "Includes": "#include \"vec/VecToken.h\"\n#include \"lex/scanner/scanner_error.h\""
         }
     ]
 }

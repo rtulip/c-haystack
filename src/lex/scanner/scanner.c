@@ -1,4 +1,6 @@
 #include "lex/scanner/scanner.h"
+#include "option/OptionScannerError.h"
+#include "lex/scanner/scanner_error.h"
 #include "sv/sv.h"
 #include <stdbool.h>
 #include <assert.h>
@@ -9,13 +11,12 @@
 typedef struct Scanner {
     const StringView* const filename;
     const StringView* const source;
-    VecToken   tokens;
-
-    size_t     start;
-    size_t     current;
-    size_t     line;
-    size_t     token_start;
-    size_t     token_end;
+    VecToken tokens;
+    size_t start;
+    size_t current;
+    size_t line;
+    size_t token_start;
+    size_t token_end;
 } Scanner;
 
 static Scanner _scanner_init_alloc(const StringView* const  filepath, const StringView* const source)
@@ -33,6 +34,21 @@ static Scanner _scanner_init_alloc(const StringView* const  filepath, const Stri
         .token_start = 1,
         .token_end = 1,
     };
+}
+
+static Quote _scanner_quote(const Scanner* const self, size_t start, size_t end)
+{
+    assert(self != NULL);
+
+    StringView sv = sv_substring(self->source, start, end);
+    return quote_new(
+        sv,
+        *self->filename,
+        self->line,
+        self->token_start,
+        self->token_end
+    );
+
 }
 
 static bool _scanner_is_at_end(const Scanner* const self)
@@ -61,98 +77,57 @@ static char _scanner_peek(const Scanner* const self, size_t offset)
 static void _scanner_add_token(Scanner* const self, TokenKindTag kind)
 {
     assert(self != NULL);
-    StringView sv = sv_substring(self->source, self->start, self->current);
+    
     switch (kind)
     {
         case TOKENKIND_TAG_LEFT_BRACE:
 
             vec_token_push(&self->tokens, token_new(
-                quote_new(
-                    sv,
-                    *self->filename,
-                    self->line,
-                    self->token_start,
-                    self->token_end
-                ),
+                _scanner_quote(self, self->start, self->current),
                 token_kind_new_left_brace()
             ));
             break;
 
         case TOKENKIND_TAG_RIGHT_BRACE:
             vec_token_push(&self->tokens, token_new(
-                quote_new(
-                    sv,
-                    *self->filename,
-                    self->line,
-                    self->token_start,
-                    self->token_end
-                ),
+                _scanner_quote(self, self->start, self->current),
                 token_kind_new_right_brace()
             ));
             break;
         case TOKENKIND_TAG_LEFT_PAREN:
             vec_token_push(&self->tokens, token_new(
-                quote_new(
-                    sv,
-                    *self->filename,
-                    self->line,
-                    self->token_start,
-                    self->token_end
-                ),
+                _scanner_quote(self, self->start, self->current),
                 token_kind_new_left_paren()
             ));
             break;
         case TOKENKIND_TAG_RIGHT_PAREN:
             vec_token_push(&self->tokens, token_new(
-                quote_new(
-                    sv,
-                    *self->filename,
-                    self->line,
-                    self->token_start,
-                    self->token_end
-                ),
+                _scanner_quote(self, self->start, self->current),
                 token_kind_new_right_paren()
             ));
             break;
         case TOKENKIND_TAG_LEFT_BRACKET:
             vec_token_push(&self->tokens, token_new(
-                quote_new(
-                    sv,
-                    *self->filename,
-                    self->line,
-                    self->token_start,
-                    self->token_end
-                ),
+                _scanner_quote(self, self->start, self->current),
                 token_kind_new_left_bracket()
             ));
             break;
         case TOKENKIND_TAG_RIGHT_BRACKET:
             vec_token_push(&self->tokens, token_new(
-                quote_new(
-                    sv,
-                    *self->filename,
-                    self->line,
-                    self->token_start,
-                    self->token_end
-                ),
+                _scanner_quote(self, self->start, self->current),
                 token_kind_new_right_bracket()
             ));
             break;
         case TOKENKIND_TAG_IDENT:
         {   
+            StringView sv = sv_substring(self->source, self->start, self->current);
             KeywordId kw = ident_is_keyword(&sv);
             TokenKind kind = (kw == KW_END_OF_LIST) ? 
                 token_kind_new_ident(sv) :
                 token_kind_new_keyword(kw);
 
             vec_token_push(&self->tokens, token_new(
-                quote_new(
-                    sv,
-                    *self->filename,
-                    self->line,
-                    self->token_start,
-                    self->token_end
-                ),
+                _scanner_quote(self, self->start, self->current),
                 kind
             ));
             break;
@@ -163,31 +138,21 @@ static void _scanner_add_token(Scanner* const self, TokenKindTag kind)
         }
         case TOKENKIND_TAG_NUMBER:
         {
+            StringView sv = sv_substring(self->source, self->start, self->current);
             uint32_t n = strtoul(sv.slice, NULL, 10);
 
             vec_token_push(&self->tokens, token_new(
-                quote_new(
-                    sv,
-                    *self->filename,
-                    self->line,
-                    self->token_start,
-                    self->token_end
-                ),
+                _scanner_quote(self, self->start, self->current),
                 token_kind_new_number(n)
             ));
             break;
         }
         case TOKENKIND_TAG_STRING:
         {
+            StringView sv = sv_substring(self->source, self->start, self->current);
             StringView string = sv_substring(&sv, 1, sv.length -1);
             vec_token_push(&self->tokens, token_new(
-                quote_new(
-                    sv,
-                    *self->filename,
-                    self->line,
-                    self->token_start,
-                    self->token_end
-                ),
+                _scanner_quote(self, self->start, self->current),
                 token_kind_new_string(string)
             ));
             break;
@@ -210,6 +175,7 @@ static void _scanner_newline(Scanner* const self)
 
 static bool _should_advance_ident(const Scanner* self)
 {
+
     switch (_scanner_peek(self, 1))
     {
         case ' ':
@@ -255,17 +221,20 @@ static void _scanner_parse_number(Scanner* const self)
     _scanner_add_token(self, TOKENKIND_TAG_NUMBER);
 }
 
-static void _scanner_parse_string(Scanner* const self)
+static OptionScannerError _scanner_parse_string(Scanner* const self)
 {
-    while (_scanner_peek(self, 1) != '"')
+    while (!_scanner_is_at_end(self) && _scanner_peek(self, 1) != '"')
     {
-        if (_scanner_is_at_end(self))
-        {
-            printf("ERROR: Unterminated string");
-            exit(1);
-        }
-
         _scanner_advance(self);
+    }
+
+    if (_scanner_is_at_end(self))
+    {
+        return option_scanner_error_some(
+            scanner_error_new_unterminated_string(
+                _scanner_quote(self, self->start, self->start+1)
+            )
+        );
     }
 
     /**
@@ -274,12 +243,15 @@ static void _scanner_parse_string(Scanner* const self)
     _scanner_advance(self);    
 
     _scanner_add_token(self, TOKENKIND_TAG_STRING);
+
+    return option_scanner_error_none();
 }
 
-static void _scanner_next_token(Scanner* const self)
+static OptionScannerError _scanner_next_token(Scanner* const self)
 {
     assert(self != NULL);
 
+    OptionScannerError err = option_scanner_error_none();
     const char c = _scanner_advance(self);
     switch (c)
     {
@@ -303,7 +275,7 @@ static void _scanner_next_token(Scanner* const self)
             break;
         
         case '"':
-            _scanner_parse_string(self);
+            err = _scanner_parse_string(self);
             break;
 
         /**
@@ -330,19 +302,24 @@ static void _scanner_next_token(Scanner* const self)
             }
             else 
             {
-                printf("ERROR: Not sure what to do with char `%c`\n", c);
-                exit(1);
+                err = option_scanner_error_some(
+                    scanner_error_new_unhandled_character(
+                        c,
+                        _scanner_quote(self, self->current-1, self->current)
+                    )
+                );
             }
         }
     }
+
+    return err;
 }
 
-VecToken scan_tokens_alloc(
+EitherVecTokenOrScannerError scan_tokens_alloc(
     const StringView* const filepath, 
     const StringView* const  source
 )
 {
-
     Scanner scanner = _scanner_init_alloc(filepath, source);
 
     while (!_scanner_is_at_end(&scanner))
@@ -350,8 +327,14 @@ VecToken scan_tokens_alloc(
         scanner.start = scanner.current;
         scanner.token_start = scanner.token_end;
 
-        _scanner_next_token(&scanner);
+        OptionScannerError err = _scanner_next_token(&scanner);
+        if (option_scanner_error_is_some(&err))
+        {
+            return either_vec_token_or_scanner_error_new_scanner_error(
+                option_scanner_error_unwrap(err)
+            );
+        }
     }
 
-    return scanner.tokens;
+    return either_vec_token_or_scanner_error_new_vec_token(scanner.tokens);
 }

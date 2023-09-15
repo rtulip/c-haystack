@@ -1,25 +1,25 @@
-#ifndef OPTION_{{TypeAlias}}_H_
-#define OPTION_{{TypeAlias}}_H_
+#ifndef OPTION_{{UpperTypeAlias}}_H_
+#define OPTION_{{UpperTypeAlias}}_H_
 
 #include <stddef.h>
 #include <stdbool.h>
 {{Includes}}
 
-#define option_{{TypeName}}_unwrap(option) option_{{TypeName}}_unwrap_internal(option, __FILE__, __LINE__)
+#define option_{{LowerTypeAlias}}_unwrap(option) option_{{LowerTypeAlias}}_unwrap_internal(option, __FILE__, __LINE__)
 
-typedef struct Option{{TypeAlias}} {
+typedef struct Option{{UpperTypeAlias}} {
     {{TypeName}} value;
     bool is_some;
-} Option{{TypeAlias}};
+} Option{{UpperTypeAlias}};
 
-Option{{TypeAlias}} option_{{TypeName}}_some({{TypeName}} value);
-Option{{TypeAlias}} option_{{TypeName}}_none(void);
+Option{{UpperTypeAlias}} option_{{LowerTypeAlias}}_some({{TypeName}} value);
+Option{{UpperTypeAlias}} option_{{LowerTypeAlias}}_none(void);
 
-{{TypeName}} option_{{TypeName}}_unwrap_internal(
-    Option{{TypeAlias}} option,
+{{TypeName}} option_{{LowerTypeAlias}}_unwrap_internal(
+    Option{{UpperTypeAlias}} option,
     const char* const file,
     const size_t line
 );
-bool option_{{TypeName}}_is_some(Option{{TypeAlias}}* option);
+bool option_{{LowerTypeAlias}}_is_some(const Option{{UpperTypeAlias}}* const option);
 
 #endif 

@@ -1,11 +1,12 @@
 {
     "TargetDir": "option",
-    "FileName": "Option{{TypeAlias}}",
+    "FileName": "Option{{UpperTypeAlias}}",
     "Substitutions": [
         {
-            "TypeAlias": "Bool",
-            "TypeName": "bool",
-            "Includes": ""
+            "UpperTypeAlias": "ScannerError",
+            "LowerTypeAlias": "scanner_error",
+            "TypeName": "ScannerError",
+            "Includes": "#include \"lex/scanner/scanner_error.h\""
         }
     ]
 }
