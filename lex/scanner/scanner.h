@@ -2,9 +2,9 @@
 #define SCANNER_H_
 
 #include "tools/sv/sv.h"
-#include "tools/vec/token/vec.h"
+#include ".codegen/vec/VecToken.h"
 
-TokenVec scan_tokens_alloc(
+VecToken scan_tokens_alloc(
     const StringView* const filepath, 
     const StringView* const  source
 );

@@ -1,0 +1,19 @@
+#ifndef VEC_{{UpperTypeAlias}}_H_
+#define VEC_{{UpperTypeAlias}}_H_
+
+#include <stddef.h>
+{{Includes}}
+
+typedef struct Vec{{UpperTypeAlias}} {
+    size_t capacity;
+    size_t length;
+    {{TypeName}}* slice;
+} Vec{{UpperTypeAlias}};
+
+Vec{{UpperTypeAlias}} vec_{{LowerTypeAlias}}_new(void);
+void vec_{{LowerTypeAlias}}_destroy(Vec{{UpperTypeAlias}}* const self);
+void vec_{{LowerTypeAlias}}_push(Vec{{UpperTypeAlias}}* const self, {{TypeName}} item);
+const {{TypeName}}* vec_{{LowerTypeAlias}}_at(const Vec{{UpperTypeAlias}}* const self, size_t index);
+const {{TypeName}}* vec_{{LowerTypeAlias}}_last(const Vec{{UpperTypeAlias}}* const self);
+
+#endif

@@ -36,14 +36,10 @@
             "name": "tokenkind",
             "path": "lex/token",
             "source": "tokenkind.c"
-        },
-        {
-            "name": "vec_token",
-            "path": "tools/vec/token",
-            "source": "vec.c"
         }
     ],
     "Templates": [
-        "templates/option"
+        "templates/option",
+        "templates/vec"
     ]
 }

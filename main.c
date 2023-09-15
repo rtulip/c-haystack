@@ -24,15 +24,15 @@ int main(int argc, const char** argv)
         
     printf("Source:\n%.*s\n", (int)source.length, source.slice);
     
-    TokenVec tokens = scan_tokens_alloc(&filepath, &source);
+    VecToken tokens = scan_tokens_alloc(&filepath, &source);
 
     for (size_t i = 0; i < tokens.length; i++)
     {
-        const Token* const tok = token_vec_at(&tokens, i);
+        const Token* const tok = vec_token_at(&tokens, i);
         token_print(tok);
     }
 
-    token_vec_destroy(&tokens);
+    vec_token_destroy(&tokens);
     free((void*) source.slice);
         
 

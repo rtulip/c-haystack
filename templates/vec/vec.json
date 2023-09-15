@@ -1,0 +1,12 @@
+{
+    "TargetDir": ".codegen/vec/",
+    "FileName": "Vec{{UpperTypeAlias}}",
+    "Substitutions": [
+        {
+            "UpperTypeAlias": "Token",
+            "LowerTypeAlias": "token",
+            "TypeName": "Token",
+            "Includes": "#include \"lex/token/token.h\""
+        }
+    ]
+}

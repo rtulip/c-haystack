@@ -1,5 +1,5 @@
 #include "lex/scanner/scanner.h"
-#include "tools/vec/token/vec.h"
+#include ".codegen/vec/VecToken.h"
 #include "tools/sv/sv.h"
 #include <stdbool.h>
 #include <assert.h>
@@ -10,7 +10,7 @@
 typedef struct Scanner {
     const StringView* const filename;
     const StringView* const source;
-    TokenVec   tokens;
+    VecToken   tokens;
 
     size_t     start;
     size_t     current;
@@ -27,7 +27,7 @@ static Scanner _scanner_init_alloc(const StringView* const  filepath, const Stri
     return (Scanner) {
         .filename = filepath,
         .source = source,
-        .tokens = token_vec_new(),
+        .tokens = vec_token_new(),
         .start = 0,
         .current = 0,
         .line = 1,
@@ -67,7 +67,7 @@ static void _scanner_add_token(Scanner* const self, TokenKindTag kind)
     {
         case TOKENKIND_TAG_LEFT_BRACE:
 
-            token_vec_push(&self->tokens, token_new(
+            vec_token_push(&self->tokens, token_new(
                 quote_new(
                     sv,
                     *self->filename,
@@ -80,7 +80,7 @@ static void _scanner_add_token(Scanner* const self, TokenKindTag kind)
             break;
 
         case TOKENKIND_TAG_RIGHT_BRACE:
-            token_vec_push(&self->tokens, token_new(
+            vec_token_push(&self->tokens, token_new(
                 quote_new(
                     sv,
                     *self->filename,
@@ -92,7 +92,7 @@ static void _scanner_add_token(Scanner* const self, TokenKindTag kind)
             ));
             break;
         case TOKENKIND_TAG_LEFT_PAREN:
-            token_vec_push(&self->tokens, token_new(
+            vec_token_push(&self->tokens, token_new(
                 quote_new(
                     sv,
                     *self->filename,
@@ -104,7 +104,7 @@ static void _scanner_add_token(Scanner* const self, TokenKindTag kind)
             ));
             break;
         case TOKENKIND_TAG_RIGHT_PAREN:
-            token_vec_push(&self->tokens, token_new(
+            vec_token_push(&self->tokens, token_new(
                 quote_new(
                     sv,
                     *self->filename,
@@ -116,7 +116,7 @@ static void _scanner_add_token(Scanner* const self, TokenKindTag kind)
             ));
             break;
         case TOKENKIND_TAG_LEFT_BRACKET:
-            token_vec_push(&self->tokens, token_new(
+            vec_token_push(&self->tokens, token_new(
                 quote_new(
                     sv,
                     *self->filename,
@@ -128,7 +128,7 @@ static void _scanner_add_token(Scanner* const self, TokenKindTag kind)
             ));
             break;
         case TOKENKIND_TAG_RIGHT_BRACKET:
-            token_vec_push(&self->tokens, token_new(
+            vec_token_push(&self->tokens, token_new(
                 quote_new(
                     sv,
                     *self->filename,
@@ -146,7 +146,7 @@ static void _scanner_add_token(Scanner* const self, TokenKindTag kind)
                 token_kind_new_ident(sv) :
                 token_kind_new_keyword(kw);
 
-            token_vec_push(&self->tokens, token_new(
+            vec_token_push(&self->tokens, token_new(
                 quote_new(
                     sv,
                     *self->filename,
@@ -166,7 +166,7 @@ static void _scanner_add_token(Scanner* const self, TokenKindTag kind)
         {
             uint32_t n = strtoul(sv.slice, NULL, 10);
 
-            token_vec_push(&self->tokens, token_new(
+            vec_token_push(&self->tokens, token_new(
                 quote_new(
                     sv,
                     *self->filename,
@@ -181,7 +181,7 @@ static void _scanner_add_token(Scanner* const self, TokenKindTag kind)
         case TOKENKIND_TAG_STRING:
         {
             StringView string = sv_substring(&sv, 1, sv.length -1);
-            token_vec_push(&self->tokens, token_new(
+            vec_token_push(&self->tokens, token_new(
                 quote_new(
                     sv,
                     *self->filename,
@@ -338,7 +338,7 @@ static void _scanner_next_token(Scanner* const self)
     }
 }
 
-TokenVec scan_tokens_alloc(
+VecToken scan_tokens_alloc(
     const StringView* const filepath, 
     const StringView* const  source
 )
