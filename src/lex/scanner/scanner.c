@@ -151,12 +151,22 @@ static void _scanner_add_token(Scanner* const self, TokenKindTag kind)
         {
             StringView sv = sv_substring(self->source, self->start, self->current);
             StringView string = sv_substring(&sv, 1, sv.length -1);
-            vec_token_push(&self->tokens, token_new(
-                _scanner_quote(self, self->start, self->current),
-                token_kind_new_string(string)
-            ));
+            vec_token_push(
+                &self->tokens,
+                token_new(
+                    _scanner_quote(self, self->start, self->current),
+                    token_kind_new_string(string)
+                )
+            );
             break;
         }
+        case TOKENKIND_TAG_EOF:
+            vec_token_push(&self->tokens, token_new(
+                _scanner_quote(self, self->current, self->current),
+                token_kind_new_eof()
+            ));
+            
+            break;
         default:
             printf("Unknown tokenkindtag: %d\n", kind);
             exit(1);
@@ -335,6 +345,8 @@ EitherVecTokenOrScannerError scan_tokens_alloc(
             );
         }
     }
+
+    _scanner_add_token(&scanner, TOKENKIND_TAG_EOF);
 
     return either_vec_token_or_scanner_error_new_vec_token(scanner.tokens);
 }

@@ -43,7 +43,7 @@ def build_template(template_path, buildinfo, args):
     os.makedirs(target_dir, exist_ok=True)
     file_name_template = meta['FileName']
 
-    object_files = []
+    to_generate = []
     subs = meta['Substitutions']
     for sub in subs:
         sub['TargetDir'] = meta['TargetDir']
@@ -67,10 +67,9 @@ def build_template(template_path, buildinfo, args):
             "path": f"{target_dir}/",
             "source": f"{filename}.c"
         }
+        to_generate.append(sourceinfo)
 
-        object_files.append(generate_object_file(sourceinfo, buildinfo, args))
-
-    return object_files
+    return to_generate
 
 
 def generate_object_file(sourceinfo, buildinfo, args):
@@ -103,13 +102,13 @@ def main():
     build_dir = os.path.normpath(buildinfo['BuildDir'])
     os.makedirs(build_dir, exist_ok=True)
 
-    object_files = []
+    to_generate = []
     for template in buildinfo['Templates']:
-        object_files.extend(build_template(template, buildinfo, args))
+        to_generate.extend(build_template(template, buildinfo, args))
 
+    object_files = []
     main = None
-
-    for sourceinfo in buildinfo['Sources']:
+    for sourceinfo in buildinfo['Sources'] + to_generate:
         if sourceinfo['name'] == "main":
             main = sourceinfo
             continue

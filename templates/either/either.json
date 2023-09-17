@@ -12,6 +12,17 @@
             "RightTypeName": "ScannerError",
             "RightTypeIdentifier": "err",
             "Includes": "#include \"vec/VecToken.h\"\n#include \"lex/scanner/scanner_error.h\""
+        },
+        {
+            "LeftTypeUpper": "VecStmt",
+            "LeftTypeLower": "vec_stmt",
+            "LeftTypeName": "VecStmt",
+            "LeftTypeIdentifier": "vec",
+            "RightTypeUpper": "ParserError",
+            "RightTypeLower": "parser_error",
+            "RightTypeName": "ParserError",
+            "RightTypeIdentifier": "err",
+            "Includes": "#include \"vec/VecStmt.h\"\n#include \"lex/parser/parser_error.h\""
         }
     ]
 }

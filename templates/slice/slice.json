@@ -1,0 +1,12 @@
+{
+    "TargetDir": "slice",
+    "FileName": "Slice{{UpperTypeAlias}}",
+    "Substitutions": [
+        {
+            "UpperTypeAlias": "TokenKind",
+            "LowerTypeAlias": "tokenkind",
+            "TypeName": "TokenKind",
+            "Includes": "#include \"lex/token/tokenkind.h\""
+        }
+    ]
+}

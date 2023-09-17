@@ -10,6 +10,17 @@ Token token_new(Quote quote, TokenKind kind)
     };
 }
 
+bool token_is_keyword(const Token* const token, KeywordId kw)
+{
+    assert(token != NULL);
+    if (token->kind.tag == TOKENKIND_TAG_KEYWORD)
+    {
+        return token->kind.value.kw_id == kw;
+    }
+
+    return false;
+}
+
 void token_print(const Token* const token)
 {
     
@@ -30,7 +41,4 @@ void token_print(const Token* const token)
     {
         printf("Token: NULL");
     }
-
-    
-
 }

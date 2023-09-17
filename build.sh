@@ -14,10 +14,6 @@ while [[ $# -gt 0 ]]; do
             CLEAN=YES
             shift # past argument
             ;;
-        fullclean)
-            FULLCLEAN=YES
-            shift
-            ;;
         -q|--quiet)
             QUIET=YES
             shift
@@ -35,22 +31,11 @@ done
 
 set -- "${POSITIONAL_ARGS[@]}" # restore positional parameters
 
-case ${FULLCLEAN} in
-    YES)
-        rm -rf .build/
-        rm -rf .codegen
-        rm -f main
-        exit 0
-        ;;
-    *)
-        ;;
-esac
-
 case ${CLEAN} in
     YES)
         rm -rf .build/
+        rm -rf .codegen/ 
         rm -f main
-        exit 0
         ;;
     *)
         ;;

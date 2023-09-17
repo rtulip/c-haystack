@@ -12,4 +12,6 @@ typedef struct Token {
 Token token_new(Quote quote, TokenKind kind);
 void token_print(const Token* const token);
 
+bool token_is_keyword(const Token* const token, KeywordId kw);
+
 #endif

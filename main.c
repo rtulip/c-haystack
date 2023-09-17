@@ -1,5 +1,6 @@
 #include "sv/sv.h"
 #include "lex/scanner/scanner.h"
+#include "lex/parser/parser.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -33,12 +34,15 @@ int main(int argc, const char** argv)
     }
 
     VecToken tokens = either_vec_token_or_scanner_error_unpack_vec_token(&maybe_tokens);
+    EitherVecStmtOrParserError maybe_stmts = parse(&tokens);
 
-    for (size_t i = 0; i < tokens.length; i++)
+    if (either_vec_stmt_or_parser_error_is_parser_error(&maybe_stmts))
     {
-        const Token* const tok = vec_token_at(&tokens, i);
-        token_print(tok);
+        ParserError err = either_vec_stmt_or_parser_error_unpack_parser_error(&maybe_stmts);
+        parser_error_report(&err);
+        exit(1);
     }
+
 
     vec_token_destroy(&tokens);
     free((void*) source.slice);

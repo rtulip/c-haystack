@@ -26,6 +26,8 @@ const char* token_kind_tag_to_cstr(TokenKindTag tag)
             return "TOKENKIND_TAG_KEYWORD";
         case TOKENKIND_TAG_STRING:
             return "TOKENKIND_TAG_STRING";
+        case TOKENKIND_TAG_EOF:
+            return "TOKENKIND_TAG_EOF";
         default:
             printf("ERROR: Unknown token kind tag: %d", tag);
             assert(0 && "Unknown token kind tag");
@@ -104,5 +106,13 @@ TokenKind token_kind_new_string(StringView sv)
     return (TokenKind) {
         .tag = TOKENKIND_TAG_STRING,
         .value.string = sv,
+    };
+}
+
+TokenKind token_kind_new_eof(void)
+{
+    return (TokenKind)
+    {
+        .tag = TOKENKIND_TAG_EOF,
     };
 }

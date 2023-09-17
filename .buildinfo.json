@@ -42,11 +42,22 @@
             "name": "tokenkind",
             "path": "src/lex/token",
             "source": "tokenkind.c"
+        },
+        {
+            "name": "parser",
+            "path": "src/lex/parser",
+            "source": "parser.c"
+        },
+        {
+            "name": "parser_error",
+            "path": "src/lex/parser",
+            "source": "parser_error.c"
         }
     ],
     "Templates": [
         "templates/option",
         "templates/vec",
-        "templates/either"
+        "templates/either",
+        "templates/slice"
     ]
 }

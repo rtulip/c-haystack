@@ -7,6 +7,12 @@
             "LowerTypeAlias": "token",
             "TypeName": "Token",
             "Includes": "#include \"lex/token/token.h\""
+        },
+        {
+            "UpperTypeAlias": "Stmt",
+            "LowerTypeAlias": "stmt",
+            "TypeName": "Stmt",
+            "Includes": "#include \"ast/statement/stmt.h\""
         }
     ]
 }

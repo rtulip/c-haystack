@@ -1,0 +1,27 @@
+#ifndef SLICE_{{UpperTypeAlias}}_H_
+#define SLICE_{{UpperTypeAlias}}_H_
+
+#include <stddef.h>
+{{Includes}}
+
+#define slice_{{LowerTypeAlias}}_new(array) (Slice{{UpperTypeAlias}}) { \
+    .begin = array,                                                     \
+    .size = sizeof(array)/sizeof(array[0]),                             \
+}                                                                       
+
+#define slice_{{LowerTypeAlias}}_new_const(array) (ConstSlice{{UpperTypeAlias}}) { \
+    .begin = array,                                                                \
+    .size = sizeof(array)/sizeof(array[0]),                                        \
+}                                                                       
+
+typedef struct Slice{{UpperTypeAlias}} {
+    {{TypeName}}* const begin;
+    size_t size;
+} Slice{{UpperTypeAlias}};
+
+typedef struct ConstSlice{{UpperTypeAlias}} {
+    const {{TypeName}}* const begin;
+    size_t size;
+} ConstSlice{{UpperTypeAlias}};
+
+#endif
